@@ -7,17 +7,18 @@ class MosaicController < ApplicationController
 
     if request.post?
       respond_to do |format|
-        format.json {
-          
-          render :text => mosaic(params[:images], params["scale-to-width"].to_i, params["scale-to-height"].to_i)
-        }        
+        format.json {  
+          img_path = mosaic(params[:images], params["scale-to-width"].to_i, params["scale-to-height"].to_i)          
+          render :text => img_path
+        }
+        format.png {
+          data = File.open(img_path,'rb').read
+          send_data(data , :filename => 'out.png', :type=>"image/png")
+        } 
       end
     else
-      
+      render
     end
-
-
-    
   end
 
   def tryout
@@ -43,8 +44,11 @@ class MosaicController < ApplicationController
     
     img = composite_stack(image_stack, -(rotation / 2), width, height)
     
-    tempfile = Tempfile.new('out')
-    path = "#{tempfile.path}.png"
+    #tempfile = Tempfile.new('out')
+    
+    temppath = "#{RAILS_ROOT}/tmp/mosaic_#{Process.pid}"
+    path = "#{temppath}.png"
+    
     img.write(path) { self.quality = 100 }
     
     return path     
