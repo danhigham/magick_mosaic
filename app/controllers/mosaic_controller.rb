@@ -7,9 +7,12 @@ class MosaicController < ApplicationController
   protect_from_forgery :except => :index
   
   def index
-    payload = JSON.parse(params[:params])
-
+    
     if request.post?
+      #TODO : Check for a params param!?
+      
+      payload = JSON.parse(params[:params])
+      
       img_path = mosaic(payload["images"], payload["scale-to-width"].to_i, payload["scale-to-height"].to_i)          
 
       respond_to do |format|
