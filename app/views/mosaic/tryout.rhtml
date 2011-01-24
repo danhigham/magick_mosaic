@@ -1,0 +1,37 @@
+<script>
+  $(document).ready(function (){
+    $("input#submit").click(function() {
+      var postData = {
+        "images": [
+          $("#url1").val(),
+          $("#url2").val(),
+          $("#url3").val(),
+          $("#url4").val()
+        ],
+        "mosaic-type": "polaroid-spread",
+        "scale-to-height": 480,
+        "scale-to-width": 640
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "/",
+        data: postData,
+        dataType: "json",
+        success: function(msg){
+          alert( "Data Saved: " + msg );
+        }
+      });    
+    });
+  });
+</script>
+
+
+<form >
+  <label>Image URL 1</label><input type="text" id="url1" name="url1"></input><br />
+  <label>Image URL 2</label><input type="text" id="url2" name="url2"></input><br />
+  <label>Image URL 3</label><input type="text" id="url3" name="url3"></input><br />
+  <label>Image URL 4</label><input type="text" id="url4" name="url4"></input><br />
+
+  <input id="submit" type="button" value="Submit" />
+</form>

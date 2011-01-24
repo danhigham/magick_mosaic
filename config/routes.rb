@@ -1,4 +1,8 @@
 MagickMosaic::Application.routes.draw do
+
+  match '/' => 'mosaic#index'
+  match 'tryout' => 'mosaic#tryout'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
