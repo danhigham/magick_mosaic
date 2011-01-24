@@ -1,19 +1,27 @@
 require 'RMagick'
 require 'open-uri'
+require 'json'
 
 class MosaicController < ApplicationController
   
+  protect_from_forgery :except => :index
+  
   def index
+    payload = JSON.parse(params[:params])
 
     if request.post?
+      img_path = mosaic(payload["images"], payload["scale-to-width"].to_i, payload["scale-to-height"].to_i)          
+
       respond_to do |format|
         format.json {  
-          img_path = mosaic(params[:images], params["scale-to-width"].to_i, params["scale-to-height"].to_i)          
+    
           render :text => img_path
         }
         format.png {
+                    
           data = File.open(img_path,'rb').read
           send_data(data , :filename => 'out.png', :type=>"image/png")
+          
         } 
       end
     else
