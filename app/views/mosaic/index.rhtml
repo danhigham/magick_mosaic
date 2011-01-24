@@ -1,1 +1,38 @@
-<h1>POST to this address!</h1>
+<pre>
+  __  __             _      _     __  __                 _      
+ |  \/  |           (_)    | |   |  \/  |               (_)     
+ | \  / | __ _  __ _ _  ___| | __| \  / | ___  ___  __ _ _  ___ 
+ | |\/| |/ _` |/ _` | |/ __| |/ /| |\/| |/ _ \/ __|/ _` | |/ __|
+ | |  | | (_| | (_| | | (__|   < | |  | | (_) \__ \ (_| | | (__ 
+ |_|  |_|\__,_|\__, |_|\___|_|\_\|_|  |_|\___/|___/\__,_|_|\___|
+                __/ |                                           
+               |___/                                            </pre>
+
+<p> Create a variety of mosaic images by POSTing to this address, in Ruby you would do it like this...</p>
+
+<PRE class="code">
+<I><FONT COLOR="#B22222">#!/usr/bin/ruby
+</FONT></I><B><FONT COLOR="#5F9EA0">require</FONT></B> <B><FONT COLOR="#BC8F8F">&quot;rubygems&quot;</FONT></B>
+<B><FONT COLOR="#5F9EA0">require</FONT></B> <B><FONT COLOR="#BC8F8F">&quot;uri&quot;</FONT></B>
+<B><FONT COLOR="#5F9EA0">require</FONT></B> <B><FONT COLOR="#BC8F8F">&quot;net/http&quot;</FONT></B>
+<B><FONT COLOR="#5F9EA0">require</FONT></B> <B><FONT COLOR="#BC8F8F">&quot;json&quot;</FONT></B>
+
+params = {
+  <B><FONT COLOR="#BC8F8F">&quot;images&quot;</FONT></B> =&gt; %w{
+    http://www.bugattipic.com/bugatti/car/pictures/2010/03/bugatti-veyron18.jpg
+    http://www.bugattipic.com/bugatti/car/pictures/2010/03/bugatti-veyron-red-011.jpg
+    http://www.bugattipic.com/bugatti/car/pictures/2010/03/veyron-smash01-1-100206678-l.jpg
+    http://www.bugattipic.com/bugatti/car/pictures/2010/03/bugatti-veyron19.jpg },
+    <B><FONT COLOR="#BC8F8F">&quot;mosaic-type&quot;</FONT></B> =&gt; <B><FONT COLOR="#BC8F8F">&quot;polaroid-spread&quot;</FONT></B>,
+    <B><FONT COLOR="#BC8F8F">&quot;scale-to-height&quot;</FONT></B> =&gt; 480,
+    <B><FONT COLOR="#BC8F8F">&quot;scale-to-width&quot;</FONT></B> =&gt; 640
+  }
+
+uri = URI.parse(<B><FONT COLOR="#BC8F8F">&quot;http://magickmosaic.heroku.com/&quot;</FONT></B>)
+
+http = Net::HTTP.new(uri.host, uri.port)
+x = http.request_post(uri.path, <B><FONT COLOR="#BC8F8F">&quot;params=#{params.to_json}&quot;</FONT></B>, { <B><FONT COLOR="#BC8F8F">'Accept'</FONT></B> =&gt; <B><FONT COLOR="#BC8F8F">'image/png'</FONT></B> })
+
+File.open(<B><FONT COLOR="#BC8F8F">'out.png'</FONT></B>, <B><FONT COLOR="#BC8F8F">'w'</FONT></B>) {|f| f.write(x.body) }</PRE>
+
+<p> This is something I knocked up just to play with Heroku but I plan to expand it a little, the mosaic-type parameter doesn't do anything but I am going to add to the different effects etc.. enjoy!</p>
